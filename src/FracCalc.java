@@ -1,11 +1,21 @@
+import java.util.*;
 public class FracCalc {
-
+	
     /**
      * Prompts user for input, passes that input to produceAnswer, then outputs the result.
      * @param args - unused
      */
     public static void main(String[] args) 
     {
+    	Scanner key=new Scanner(System.in);
+    	String stop="stop";
+    	String input=" ";
+    	while (!input.equals(stop)) {
+    		System.out.print("Please input fractions:");
+    		input=key.nextLine();
+    		System.out.println(produceAnswer(input));
+    	}
+    	
         // TODO: Read the input from the user and call produceAnswer with an equation
         // Checkpoint 1: Create a Scanner, read one line of input, pass that input to produceAnswer, print the result.
         // Checkpoint 2: Accept user input multiple times.
@@ -19,7 +29,15 @@ public class FracCalc {
      *      Example: return ==> "1_1/4"
      */
     public static String produceAnswer(String input)
-    { 
+    { 	
+    	for(int i=0; i<input.length();i++) {
+    		char y=input.charAt(i);
+    		if(y=='+'||y=='-'||y=='*'||( y=='/'&& input.charAt(i+1)==' ')) {
+    			String second=input.substring(i+1,input.length());
+    			return second; 
+    			
+    		}
+    	}
         // TODO: Implement this function to produce the solution to the input
         // Checkpoint 1: Return the second operand.  Example "4/5 * 1_2/4" returns "1_2/4".
         // Checkpoint 2: Return the second operand as a string representing each part.
@@ -30,7 +48,7 @@ public class FracCalc {
         // Final project: All answers must be reduced.
         //               Example "4/5 * 1_2/4" returns "1_1/5".
         
-        return "";
+    	return input;
     }
 
     // TODO: Fill in the space below with helper methods
