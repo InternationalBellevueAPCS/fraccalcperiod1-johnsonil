@@ -10,15 +10,18 @@ public class FracCalc {
     	Scanner key=new Scanner(System.in);
     	String stop="stop";
     	String input=" ";
+    	//Print rules 
     	System.out.println("RULES FOR INPUT: ");
     	System.out.println("1. input fractions as normal ex. 2/3 ");
     	System.out.println("2. inout mixed numbers using the following format 1_1/2 ");
     	System.out.println("3. negatives can be used  ");
     	System.out.println("4. space parts appropriatly 1_1/2 + 2_3/2 the space between opperand and numbers is important ");
     	System.out.println("5. Math only works if you use one operand NO 1 + 1 + 1 etc. ");
+    	//get user input 
     	while (!input.equals(stop)) {
     		System.out.print("Please input equation:");
     		input=key.nextLine();
+    		//print answer 
     		System.out.println(produceAnswer(input));
     	}
     	
@@ -36,18 +39,22 @@ public class FracCalc {
      */
     public static String produceAnswer(String input)
     { 	
+    	//declare starting variables 
     	int wholeF=0;
     	int numeratorF=0;
     	int denominatorF=0;
     	int wholeS=0;
     	int numeratorS=0;
     	int denominatorS=0;
+    	//search for opperand 
     	for(int i=0; i<input.length();i++) {
     		char y=input.charAt(i);
     		if(y=='+'||(y=='-'&& input.charAt(i+1)==' ')||y=='*'||( y=='/'&& input.charAt(i+1)==' ')) {
+    			// find second number 
     			String second=input.substring(i+2,input.length());
     			int wholeEnd=second.indexOf("_");
     			int numeratorEnd= second.indexOf("/");
+    			//make second number an integer 
     			if (wholeEnd<0 && numeratorEnd <0) {
     				wholeS= Integer.parseInt(second);
     				numeratorS= 0;
@@ -63,6 +70,7 @@ public class FracCalc {
     				numeratorS=Integer.parseInt( second.substring(wholeEnd+1,numeratorEnd));
     				denominatorS= Integer.parseInt(second.substring(numeratorEnd+1, second.length()));
     			}
+    			//find first number 
     			String first= input.substring(0,i-1);
         		int wholeEndF=first.indexOf("_");
     			int numeratorEndF= first.indexOf("/");
@@ -82,6 +90,7 @@ public class FracCalc {
     				numeratorF=Integer.parseInt( first.substring(wholeEndF+1,numeratorEndF));
     				denominatorF= Integer.parseInt(first.substring(numeratorEndF+1, first.length()));
     			}
+    			//do math 
     			if (y=='+') {
     				String result=Add(wholeF,wholeS,numeratorF,numeratorS,denominatorF, denominatorS);
     				return result;
@@ -115,7 +124,9 @@ public class FracCalc {
         
     	return input;
     }
+    //addition 
     public static String Add(int one, int two, int num1, int num2, int den1, int den2) {
+    	//distributive property 
     	if (one<0) {
     		num1*=-1;
     	}
@@ -132,10 +143,12 @@ public class FracCalc {
     	int totalNum=0;
     	int totalDen=0;
     	totalWho=one+two;
+    	//same den addition 
     	if (den1==den2) {
     		totalNum=num1+num2;
     		totalDen=den1;
     	}
+    	//diff den addition 
     	else {
     		int holderDen=den1;
     		int holderNum=num1;
@@ -149,7 +162,9 @@ public class FracCalc {
     	//String total= "total: "+ totalWho+"_"+totalNum+"/"+totalDen;
     	return Simplify(totalWho, totalNum, totalDen);
     }
+    //subtraction 
     public static String Subtract(int one, int two, int num1, int num2, int den1, int den2) {
+    	//distributaive property 
     	if (one<0) {
     		num1*=-1;
     	}
@@ -165,11 +180,13 @@ public class FracCalc {
     	int totalWho=0;
     	int totalNum=0;
     	int totalDen=0;
+    	//sme den subtraction 
     	totalWho=one-two;
     	if (den1==den2) {
     		totalNum=num1-num2;
     		totalDen=den1;
     	}
+    	//diff den subtraction 
     	else {
     		int holderDen=den1;
     		num1=num1*den2;
@@ -182,7 +199,9 @@ public class FracCalc {
     	//String total="total: "+totalWho+"_"+totalNum+"/"+totalDen;
     	return Simplify(totalWho, totalNum, totalDen); 
     }
+    //mulitply 
     public static String  Multiply(int one, int two, int num1, int num2, int den1, int den2) {
+    	//check for problematic zeros 
     	if (den1==0) {
     		den1=1;
     	}
@@ -207,7 +226,9 @@ public class FracCalc {
     	String total="total: "+totalNum+"/"+totalDen;
     	return Simplify(totalWho, totalNum, totalDen);
     }
+    //divide 
     public static String Divide(int one, int two, int num1, int num2, int den1, int den2) {
+    	//check for problamatic zeros 
     	if (den1==0) {
     		den1=1;
     	}
@@ -232,6 +253,7 @@ public class FracCalc {
     	String total="total: "+totalWho+"_"+totalNum+"/"+totalDen;
     	return Simplify(totalWho, totalNum, totalDen);    
     }
+    //simplify 
     public static String Simplify(int whole,int num, int den) {
     	if( den ==0) {
     		return whole+""; 
@@ -243,12 +265,13 @@ public class FracCalc {
     	int common= greatestCommonDivisor(endNum, den);
     	endNum/=common; 
     	den/=common;
-    	
+    	//check for double negatives 
     	if (endNum<0 && den<0) {
     		endNum*=-1;
     		den*=-1;
     		
     	}
+    	//ensure negatice in front
     	if( endNum>0 && den<0) {
     		endNum*=-1;
     		den*=-1;
@@ -258,7 +281,7 @@ public class FracCalc {
     		endNum=Math.abs(endNum);
     		den=Math.abs(den);
     	}
-    	
+    	//remove extraneous parts 
     	if (endNum==0) {
     		total= endWhole+"";   	
     	}
