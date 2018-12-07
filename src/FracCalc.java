@@ -30,14 +30,45 @@ public class FracCalc {
      */
     public static String produceAnswer(String input)
     { 	
+    	int wholeF=0;
+    	int numeratorF=0;
+    	int denominatorF=0;
+    	int wholeS=0;
+    	int numeratorS=0;
+    	int denominatorS=0;
     	for(int i=0; i<input.length();i++) {
     		char y=input.charAt(i);
     		if(y=='+'||y=='-'||y=='*'||( y=='/'&& input.charAt(i+1)==' ')) {
     			String second=input.substring(i+1,input.length());
-    			return second; 
-    			
+    			int wholeEnd=second.indexOf("_");
+    			int numeratorEnd= second.indexOf("/");
+    			String whole= "whole: ";
+				String numerator= "numerator: ";
+				String denominator= "denominator: ";
+    			if (wholeEnd<0 && numeratorEnd <0) {
+    				wholeEnd=i;
+    				whole= "whole: "+second.substring(0,i);
+    				numerator= "numerator: 0";
+    				denominator=" denominator: 0";
+    			}
+    			else if (wholeEnd<0) {
+    				numerator= "numerator: "+second.substring(0,numeratorEnd);
+    				whole ="whole: 0";
+    				denominator= "denominator: "+ second.substring(numeratorEnd+1, second.length());
+    			}
+    			else {
+    				whole= "whole: "+second.substring(0,wholeEnd);
+    				numerator= "numerator: "+ second.substring(wholeEnd+1,numeratorEnd);
+    				denominator= "denominator: "+second.substring(numeratorEnd+1, second.length());
+    			}
+    			return whole +" "+ numerator+ " "+denominator; 
+
+    			//return whole +" "+ numerator+ " "+denominator;
+        			
     		}
+    		
     	}
+    	
         // TODO: Implement this function to produce the solution to the input
         // Checkpoint 1: Return the second operand.  Example "4/5 * 1_2/4" returns "1_2/4".
         // Checkpoint 2: Return the second operand as a string representing each part.
@@ -50,7 +81,92 @@ public class FracCalc {
         
     	return input;
     }
-
+    public static String Add(int one, int two, int num1, int num2, int den1, int den2) {
+    	int totalWho=0;
+    	int totalNum=0;
+    	int totalDen=0;
+    	totalWho=one+two;
+    	if (den1==den2) {
+    		totalNum=num1+num2;
+    		totalDen=den1;
+    	}
+    	else {
+    		int holderDen=den1;
+    		int holderNum=num1;
+    		num1=num1*den2;
+    		den1=den1*den2;
+    		num2=holderNum*num2;
+    		den2=holderDen*den2;
+    		totalNum=num1+num2;
+    		totalDen=den1;
+    	}
+    	//String total= "total: "+ totalWho+"_"+totalNum+"/"+totalDen;
+    	return Simplify(totalWho, totalNum, totalDen);
+    }
+    public static String Subtract(int one, int two, int num1, int num2, int den1, int den2) {
+    	int totalWho=0;
+    	int totalNum=0;
+    	int totalDen=0;
+    	totalWho=one-two;
+    	if (den1==den2) {
+    		totalNum=num1-num2;
+    		totalDen=den1;
+    	}
+    	else {
+    		int holderDen=den1;
+    		int holderNum=num1;
+    		num1=num1*den2;
+    		den1=den1*den2;
+    		num2=holderNum*num2;
+    		den2=holderDen*den2;
+    		totalNum=num1-num2;
+    		totalDen=den1;
+    	}
+    	//String total="total: "+totalWho+"_"+totalNum+"/"+totalDen;
+    	return Simplify(totalWho, totalNum, totalDen); 
+    }
+    public static String  Multiply(int one, int two, int num1, int num2, int den1, int den2) {
+    	int totalWho=0;
+    	int totalNum=0;
+    	int totalDen=0;
+    	int oneW=one*den1;
+    	int twoW=two*den2;
+    	num1+=oneW;
+    	num2+=twoW;
+    	totalNum=num1*num2;
+    	totalDen=den2*den1;
+    	String total="total: "+totalNum+"/"+totalDen;
+    	return Simplify(totalWho, totalNum, totalDen);
+    }
+    public static String Divide(int one, int two, int num1, int num2, int den1, int den2) {
+    	int totalWho=0;
+    	int totalNum=0;
+    	int totalDen=0;
+    	int oneW=one*den1;
+    	int twoW=two*den2;
+    	num1+=oneW;
+    	num2+=twoW;
+    	totalNum=num1*den2;
+    	totalDen=num2*den1;
+    	String total="total: "+totalWho+"_"+totalNum+"/"+totalDen;
+    	return Simplify(totalWho, totalNum, totalDen);    
+    }
+    public static String Simplify(int whole,int num, int den) {
+    	int endNum= num%den; 
+    	String total=" ";
+    	int addWhole=(num-endNum)/den; 
+    	int endWhole= addWhole+whole; 
+    	int common= greatestCommonDivisor(endNum, den);
+    	endNum/=common; 
+    	den/=common;
+    	if (endNum==0) {
+    		total= "total: "+ endWhole; 
+    	}
+    	else {
+    		total= "total: "+ endWhole + "_"+endNum+"/"+den;
+    	}
+    	return total;
+    }
     // TODO: Fill in the space below with helper methods
     
     /**
