@@ -164,7 +164,7 @@ public class FracCalc {
     }
     //subtraction 
     public static String Subtract(int one, int two, int num1, int num2, int den1, int den2) {
-    	//distributaive property 
+    	//distributive property 
     	if (one<0) {
     		num1*=-1;
     	}
@@ -172,7 +172,7 @@ public class FracCalc {
     		num2*=-1;
     	}
     	if( one ==0 && den1==0) {
-    		return Simplify(two, num2, den2) ;
+    		return Simplify(two*-1, num2, den2) ;
     	}
     	else if( two ==0 && den2==0) {
     		return Simplify(one, num1, den1) ;
@@ -180,8 +180,17 @@ public class FracCalc {
     	int totalWho=0;
     	int totalNum=0;
     	int totalDen=0;
-    	//sme den subtraction 
+    	//same den subtraction 
+    	//test to make sure second whole number isn't greater than first, and second fraction isn't less than first 
+    	if ((den1!=0 && den2!=0)&& one+num1/den1<two+num2/den2) {
+    		num1+=one*den1;
+    		num2+=two*den2;
+    		one=0;
+    		two=0;
+    	}
+    	
     	totalWho=one-two;
+    	
     	if (den1==den2) {
     		totalNum=num1-num2;
     		totalDen=den1;
@@ -196,10 +205,11 @@ public class FracCalc {
     		totalNum=num1-num2;
     		totalDen=den1;
     	}
+    	
     	//String total="total: "+totalWho+"_"+totalNum+"/"+totalDen;
     	return Simplify(totalWho, totalNum, totalDen); 
     }
-    //mulitply 
+    //mulitiply 
     public static String  Multiply(int one, int two, int num1, int num2, int den1, int den2) {
     	//check for problematic zeros 
     	if (den1==0) {
